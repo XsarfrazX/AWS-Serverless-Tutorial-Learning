@@ -20,11 +20,11 @@ async function createAuction(event, context) {
   }
 
   await dynamodb.put({
-    TableName: 'AuctionsTable',
+    TableName: process.env.AUCTIONS_TABLE_NAME,
     Item: auction
   }).promise();
 
-  
+
   return {
     statusCode: 201,
     body: JSON.stringify({ auction }),
