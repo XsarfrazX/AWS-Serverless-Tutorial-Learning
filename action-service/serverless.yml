@@ -10,7 +10,16 @@ provider:
   runtime: nodejs12.x
   memorySize: 256
   stage: ${opt:stage, 'dev'}
-  
+  iamRoleStatements: 
+   - ${file(iam/AuctionsTableIAM.yml):AuctionsTableIAM}
+
+
+
+resources:
+  Resources: 
+    AuctionsTable: ${file(resources/AuctionsTable.yml):AuctionsTable}
+ 
+
 functions:
   createAuction:
     handler: src/handlers/createAuction.handler
