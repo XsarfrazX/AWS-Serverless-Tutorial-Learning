@@ -30,6 +30,12 @@ functions:
           method: POST
           path: /auction
 
+  getAuction:
+    handler: src/handlers/getAuctions.handler
+    events:
+      - http:
+          method: GET
+          path: /auctions
 custom:
   AuctionsTable:
     name: !Ref AuctionsTable
