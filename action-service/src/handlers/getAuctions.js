@@ -6,6 +6,12 @@ import createError from 'http-errors';
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
 
+/**
+ * Function or AWS lambda to scan all auction items from
+ * the dynamoDB table
+ * @param {Http request data} event 
+ * @param {meta deta} context 
+ */
 async function getAuctions(event, context) {
 
     let auctions;
