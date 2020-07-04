@@ -5,16 +5,11 @@ import createError from 'http-errors';
 const dynamodb = new AWS.DynamoDB.DocumentClient(); //dynamoDB access
 
 /**
- * Function or AWS lambda to get Auction by ID
- * i.e. Querying from dynamoDB using primary partition key
- * @param {Http request data} event 
- * @param {meta deta} context 
+ * Factory function to getAuctionById from DB
+ * @param {Auction Id} id 
  */
-async function getAuction(event, context) {
-
+export async function getAuctionById(id){
     let auction;
-    const { id } = event.pathParameters; //extract id from request path
-
     try{
         const result = await dynamodb.get({ 
             TableName: process.env.AUCTIONS_TABLE_NAME,
@@ -28,10 +23,26 @@ async function getAuction(event, context) {
         throw new createError.InternalServerError(error);
     }
 
-
+    
     if(!auction) {
         throw new createError.NotFound(`Auction with ID "${id}" Not found`.toString());
     }
+
+
+    return auction;
+}
+
+/**
+ * Function or AWS lambda to get Auction by ID
+ * i.e. Querying from dynamoDB using primary partition key
+ * @param {Http request data} event 
+ * @param {meta deta} context 
+ */
+async function getAuction(event, context) {
+
+    const { id } = event.pathParameters; //extract id from request path
+
+    const auction = await getAuctionById(id);
 
 
   return {
