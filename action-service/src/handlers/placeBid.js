@@ -20,6 +20,9 @@ async function placeBid(event, context) {
     const auction = await getAuctionById(id); // handle if auction exists 
 
 
+    if(auction.status !== 'OPEN'){
+        throw new createError.Forbidden('You cannot bid on a closed Auction!');
+    }
     if(amount <= auction.highestBid.amount){
 
         throw new createError.Forbidden(`You bid must be highter that ${auction.highestBid.amount}`);
