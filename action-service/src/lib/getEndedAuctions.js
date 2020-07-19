@@ -7,12 +7,12 @@ export async function getEndedAuctions() {
     const params = {
         TableName: process.env.AUCTIONS_TABLE_NAME,
         IndexName: 'statusAndEndDate',
-        KeyConditionExpression: '#status = : status AND endingAt <= :now', //AWS DynamoDB specific
-        ExpressionAttributesValues: {
+        KeyConditionExpression: '#status = :status AND endingAt <= :now', //AWS DynamoDB specific
+        ExpressionAttributeValues: {
             ':status': 'OPEN',
             ':now': now.toISOString(),
         },
-        ExpressionAttributesNames: {
+        ExpressionAttributeNames: {
             '#status': 'status',
         }
     };
