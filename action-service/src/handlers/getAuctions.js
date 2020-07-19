@@ -15,10 +15,22 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 async function getAuctions(event, context) {
 
     let auctions;
+    const { status } = event.queryStringParameters; //status queryParams to be provided in API call
+
+    const params = {
+      TableName: process.env.AUCTIONS_TABLE_NAME,
+      IndexName: 'statusAndEndDate',
+      KeyConditionExpression: '#status = :status', //AWS DynamoDB specific
+      ExpressionAttributeValues: {
+          ':status': status,
+      },
+      ExpressionAttributeNames: {
+          '#status': 'status', // #status because status has a predefined meaning in DynamoDB
+      }
+  }; //query params 
 
     try{
-        const result = await dynamodb.scan({ TableName: process.env.AUCTIONS_TABLE_NAME
-        }).promise();
+        const result = await dynamodb.query(params).promise();
 
         auctions = result.Items;
 
